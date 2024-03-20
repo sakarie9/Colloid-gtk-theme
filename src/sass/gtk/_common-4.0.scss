@@ -2241,7 +2241,7 @@ magnifier {
     box-shadow: none;
   }
 
-  &:selected:not(:active) {
+  &:checked {
     transition: $transition,
                 border-image $ripple-fade-in-duration $ease-out,
                 background-size 0ms,
@@ -2537,7 +2537,7 @@ tabbar {
     border-radius: 0;
     min-height: $medium-size;
     border: none;
-    box-shadow: none;
+    box-shadow: inset 0 -1px $border;
 
     &:backdrop {
       background-color: $titlebar-backdrop;
@@ -2562,7 +2562,7 @@ tabbar {
     }
 
     > separator {
-      margin: 9px 0;
+      margin: $space-size * 1.5 0;
       transition: opacity 150ms ease-in-out;
 
       &.hidden {
@@ -3719,27 +3719,6 @@ row {
   color: $text-secondary;
   background-clip: padding-box;
 
-  label.subtitle {
-    font-size: smaller;
-    @extend .dim-label;
-  }
-
-  > box.header {
-    margin-left: $space-size * 2;
-    margin-right: $space-size * 2;
-    min-height: $large-size;
-
-    > .icon:disabled {
-      filter: opacity(0.35);
-    }
-
-    > box.title {
-      margin-top: $space-size;
-      margin-bottom: $space-size;
-      border-spacing: $space-size / 2;
-    }
-  }
-
   @at-root %row_activatable, &.activatable {
     transition: $transition,
                 background-size $ripple-fade-out-duration $ease-out,
@@ -3882,10 +3861,37 @@ row {
       &:dir(rtl) { margin-left: $space-size; }
     }
   }
+
+  &.property > box.header > box.title > {
+    .title {
+      @extend .caption;
+      @extend .dim-label;
+    }
+
+    .subtitle {
+      font-size: inherit;
+      opacity: 1;
+    }
+  }
 }
 
 // AdwEntryRow
 row.entry {
+  &:not(:selected).activatable.focused:hover,
+  &:not(:selected).activatable.focused:active {
+    background-color: transparent;
+  }
+
+  &:disabled {
+    text {
+      opacity: 0.45;
+    }
+
+    .dim-label, .subtitle {
+      opacity: 1;
+    }
+  }
+
   .edit-icon, .indicator {
     min-width: 24px;
     min-height: 24px;
@@ -3910,6 +3916,11 @@ row.entry {
 }
 
 row.spin {
+  &:not(:selected).activatable.focused:hover,
+  &:not(:selected).activatable.focused:active {
+    background-color: transparent;
+  }
+
   spinbutton {
     background: none;
     border-spacing: $space-size;
@@ -3995,6 +4006,14 @@ row.combo {
 
   popover > contents {
     min-width: 120px;
+
+    .combo-searchbar {
+      margin: 6px;
+
+      + scrolledwindow {
+        @include undershoot(top, $border);
+      }
+    }
   }
 }
 
